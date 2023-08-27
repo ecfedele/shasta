@@ -1,0 +1,1 @@
+uefiboot.o: ../uefiboot.c
