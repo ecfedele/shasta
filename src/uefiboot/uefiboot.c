@@ -1,3 +1,30 @@
+// ------------------------------------------------------------------------------------------------------------------ //
+// Title       : Main Entry Point, 64-bit UEFI Bootloader                                                             //
+// Filename    : uefiboot.c                                                                                           //
+// Description : Provides the main entry point and program body for the 64-bit UEFI bootloader.                       //
+//                                                                                                                    //
+// Project     : Shasta Microkernel                                                                                   //
+// Main Author : Elijah Creed Fedele <ecfedele@outlook.com>                                                           //
+// Created     : August 27, 2023                                                                                      //
+// Modified    : August 27, 2023                                                                                      //
+// Version     : 0.0.0                                                                                                //
+// License     : GNU General Public License (GPL) version 3.0                                                         //
+// Copyright   : (C) 2023- Elijah Creed Fedele                                                                        //
+// ------------------------------------------------------------------------------------------------------------------ //
+// This file is part of the Shasta microkernel project (https://github.com/ecfedele/shasta).                          //
+// Copyright (c) 2023- Elijah Creed Fedele.                                                                           //
+//                                                                                                                    //
+// This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public  //
+// License as published by the Free Software Foundation, version 3.                                                   //
+//                                                                                                                    //
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied //
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more       //
+// details.                                                                                                           //
+//                                                                                                                    //
+// You should have received a copy of the GNU General Public License along with this program. If not, see             //
+//     <http://www.gnu.org/licenses/>.                                                                                //
+// ------------------------------------------------------------------------------------------------------------------ //
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
