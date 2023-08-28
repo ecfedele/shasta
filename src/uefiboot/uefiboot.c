@@ -25,26 +25,25 @@
 //     <http://www.gnu.org/licenses/>.                                                                                //
 // ------------------------------------------------------------------------------------------------------------------ //
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <efi.h>
+#include <efilib.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdbool.h>
 
-#ifdef EFI_APP
-#include <efi.h>
-#include <efilib.h>
-#endif /* EFI_APP */
 
-int main(int argc, char **argv) {
-    printf("Hello, world!\n");
-    return EXIT_SUCCESS;
-}
-
-#ifdef EFI_APP
 EFI_STATUS EFIAPI efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+    EFI_STATUS Status;
+    EFI_INPUT_KEY Key;
+    EFI_SYSTEM_TABLE *ST = SystemTable;
     InitializeLib(ImageHandle, SystemTable);
     Print(L"Hello, world!\r\n");
-    return EFI_SUCCESS;
+
+    Status = ST->ConIn->Reset(ST->ConIn, FALSE);
+    if (EFI_ERROR(Status))
+        return Status;
+    while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY);
+
+    return Status;
 }
-#endif /* EFI_APP */
