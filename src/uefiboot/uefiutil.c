@@ -79,6 +79,21 @@ EFI_STATUS Print(const char *fmt, ...) {
     // allocated below will not handle it
     if (StringLength(str) > 256)
         return EFI_BUFFER_TOO_SMALL;
+
+    // Allocate three buffers - one for the main string, one for the FormatSpecifier collection, and a final
+    // one for the working conversion variable.
+    char *printBuffer;
+    struct FormatSpecifier *formatSpecifiers;
+    char *conversionBuffer;
+
+    EFI_STATUS printBufAllocStatus = AllocatePool(EfiLoaderData, 256, printBuffer);
+    EFI_STATUS fmtBufAllocStatus = AllocatePool(EfiLoaderData, 
+                                                16 * sizeof(struct FormatSpecifier), 
+                                                formatSpecifiers);
+    EFI_STATUS convBufAllocStatus = AllocatePool(EfiLoaderData, 64, conversionBuffer);
+    if (EFI_ERROR(printBufAllocStatus) || EFI_ERROR(fmtBufAllocStatus) || EFI_ERROR(convBufAllocStatus)) {
+        
+    }
 }
 
 /// @brief Private helper function for `Print`. Returns string length. Assumes regular `char` code points, 
@@ -92,6 +107,13 @@ size_t StringLength(const char *str) {
     return i;
 }
 
+/// @brief Parses the format string provided to `Print` and stores an array of `FormatSpecifier` elements in
+///        the location pointed to by the `fs` pointer. See the extended documentation for a complete list of
+///        format specifier codes supported by `ParseFormattedString` and its parent function `Print`.
+/// @param fmt      the formatter string provided to `Print`.
+/// @param fs       a pointer to the `FormatSpecifier` allocation block
+/// @param numalloc the number of `FormatSpecifier` elements allocated in the memory pointed to by `fs`
+/// @return         the number of format codes present in the formatter string
 size_t ParseFormattedString(const char *fmt, struct FormatSpecifier *fs, size_t numalloc) {
     int location = 0;
     size_t specIndex = 0;
@@ -143,11 +165,21 @@ size_t ParseFormattedString(const char *fmt, struct FormatSpecifier *fs, size_t 
                         fs[specIndex].modifier = *fmt;
                         break;
                     case '0' ... '9':
+                        if (fs[specIndex].precision == -1) {
+                            fs[specIndex].width = (fs[specIndex].width == -1) ? 0;
+                            fs[specIndex].width = (fs[specIndex].width * 10) + (*fmt - '0');
+                        }
+                        else fs[specIndex].precision = (fs[specIndex].precision * 10) + (*fmt - '0');
+                        break;
                     case '.':
+                        fs[specIndex].precision = 0;
+                        break;
                 }
             }
         }
 
         fmt++;
     }
+    
+    return specIndex;
 }
