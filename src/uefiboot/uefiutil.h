@@ -1,12 +1,13 @@
 // -------------------------------------------------------------------------------------------------------- //
-// Title       : Main Entry Point, 64-bit UEFI Bootloader                                                   //
-// Filename    : uefiboot.c                                                                                 //
-// Description : Provides the main entry point and program body for the 64-bit UEFI bootloader.             //
+// Title       : Header File, UEFI Utility Functions                                                        //
+// Filename    : uefiutil.h                                                                                 //
+// Description : Provides a collection of functions primarily intended to serve as a replacement for some   //
+//               GNU-EFI utility functions.                                                                 //
 //                                                                                                          //
 // Project     : Shasta Microkernel                                                                         //
 // Main Author : Elijah Creed Fedele <ecfedele@outlook.com>                                                 //
-// Created     : August 27, 2023                                                                            //
-// Modified    : August 27, 2023                                                                            //
+// Created     : August 29, 2023                                                                            //
+// Modified    : August 29, 2023                                                                            //
 // Version     : 0.0.0                                                                                      //
 // License     : GNU General Public License (GPL) version 3.0                                               //
 // Copyright   : (C) 2023- Elijah Creed Fedele                                                              //
@@ -27,24 +28,16 @@
 
 #include <efi.h>
 #include <efilib.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdbool.h>
 
-#include "uefiutil.h"
+#ifndef UEFI_FUNCTIONS_H
+#define UEFI_FUNCTIONS_H
 
-EFI_STATUS EFIAPI efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
-    EFI_SYSTEM_TABLE *ST = SystemTable;
-    InitializeLib(ImageHandle, SystemTable);
-    Print(L"Hello, world!\r\n");
+void        InitializeLib   (EFI_HANDLE, EFI_SYSTEM_TABLE *);
+EFI_STATUS  AllocatePool    (EFI_MEMORY_TYPE, UINTN, VOID **);
+EFI_STATUS  FreePool        (VOID *);
+EFI_STATUS  Print           (const char *, ...);
 
-    Status = ST->ConIn->Reset(ST->ConIn, FALSE);
-    if (EFI_ERROR(Status))
-        return Status;
-    while ((Status = ST->ConIn->ReadKeyStroke(ST->ConIn, &Key)) == EFI_NOT_READY);
-
-    return Status;
-}
+#endif /* UEFI_FUNCTIONS_H */
