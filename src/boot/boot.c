@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------------------------------------------- //
 // Title       : Main Entry Point, 64-bit UEFI Bootloader                                                   //
-// Filename    : uefiboot.c                                                                                 //
+// Filename    : boot.c                                                                                     //
 // Description : Provides the main entry point and program body for the 64-bit UEFI bootloader.             //
 //                                                                                                          //
 // Project     : Shasta Microkernel                                                                         //

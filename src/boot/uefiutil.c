@@ -45,7 +45,8 @@ size_t  ParseFormattedString(const char *, struct FormatSpecifier *, size_t);
 /// @brief InitializeLib stores local copies of the EFI image and system table handles.
 /// @param ImageHandle the `EFI_HANDLE` passed to `efi_main`
 /// @param SystemTable the `EFI_SYSTEM_TABLE` passed to `efi_main`
-void InitializeLib(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+void InitializeLib(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) 
+{
     IH = ImageHandle;
     ST = SystemTable;
 }
@@ -57,14 +58,16 @@ void InitializeLib(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 /// @param BufferSize the size of the buffer allocation desired
 /// @param Buffer     a supplied pointer to be pointed at the allocated memory area
 /// @return           an `EFI_STATUS` indicating the result of the call to `AllocatePool`
-EFI_STATUS AllocatePool(EFI_MEMORY_TYPE EfiType, uint64_t BufferSize, void *Buffer) {
+EFI_STATUS AllocatePool(EFI_MEMORY_TYPE EfiType, uint64_t BufferSize, void *Buffer) 
+{
     return ST->BootServices->AllocatePool(EfiType, BufferSize, &Buffer);
 }
 
 /// @brief Frees (releases) a memory allocation made via `AllocatePool`.
 /// @param Buffer a pointer to the allocated buffer
 /// @return       an `EFI_STATUS` indicating the result of the call to `AllocatePool`
-EFI_STATUS FreePool(void *Buffer) {
+EFI_STATUS FreePool(void *Buffer) 
+{
     return ST->BootServices->AllocatePool(Buffer);
 }
 
@@ -74,7 +77,8 @@ EFI_STATUS FreePool(void *Buffer) {
 /// @param fmt The formatted string to substitute and print
 /// @param ... A vararg list to inject into `fmt` in accordance with the format specifiers
 /// @return    an `EFI_STATUS` indicating the result of the call to `Print`
-EFI_STATUS Print(const char *fmt, ...) {
+EFI_STATUS Print(const char *fmt, ...) 
+{
     // if the string is greater than 256 characters, error out - the fixed-length buffers
     // allocated below will not handle it
     if (StringLength(str) > 256)
@@ -92,7 +96,7 @@ EFI_STATUS Print(const char *fmt, ...) {
                                                 formatSpecifiers);
     EFI_STATUS convBufAllocStatus = AllocatePool(EfiLoaderData, 64, conversionBuffer);
     if (EFI_ERROR(printBufAllocStatus) || EFI_ERROR(fmtBufAllocStatus) || EFI_ERROR(convBufAllocStatus)) {
-        
+
     }
 }
 
@@ -100,7 +104,8 @@ EFI_STATUS Print(const char *fmt, ...) {
 ///        rather than the 16-bit wide chars of UEFI printing implementations.
 /// @param str the string to measure
 /// @return    the length of the supplied string
-size_t StringLength(const char *str) {
+size_t StringLength(const char *str) 
+{
     size_t i = 0;
     while (str[i] != '\0')
         i++;
@@ -114,7 +119,8 @@ size_t StringLength(const char *str) {
 /// @param fs       a pointer to the `FormatSpecifier` allocation block
 /// @param numalloc the number of `FormatSpecifier` elements allocated in the memory pointed to by `fs`
 /// @return         the number of format codes present in the formatter string
-size_t ParseFormattedString(const char *fmt, struct FormatSpecifier *fs, size_t numalloc) {
+size_t ParseFormattedString(const char *fmt, struct FormatSpecifier *fs, size_t numalloc) 
+{
     int location = 0;
     size_t specIndex = 0;
     bool isSpecifier = false;
