@@ -36,11 +36,14 @@ struct FormatSpecifier {
     char modifier;
     int  width;
     int  precision;
+    bool hasPrecision;
 };
 
 size_t     StringLength        (const char *String);
 size_t     CountCharOccurrences(const char *String, const char c);
 size_t     ParseFormattedString(const char *Format, struct FormatSpecifier *fs, size_t NumAlloc);
+size_t     GetSpecifierLength  (struct FormatSpecifier *fs, size_t SpecifierCount);
+size_t     TotalFormattedLength(const char *Format, struct FormatSpecifier *fs, size_t SpecifierCount);
 EFI_STATUS Print               (const char *Format, ...);
 
 #endif // UEFI_PRINT_H_INCLUDED

@@ -54,5 +54,8 @@ int main()
         printf("        Precision = %d\n", fs[i].precision);
     }
 
+    size_t bytes = GetSpecifierLength(fs, count);
+    printf("These specifiers consume %d bytes of the string.\n", bytes);
+
     return EXIT_SUCCESS;
 }

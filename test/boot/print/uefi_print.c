@@ -127,6 +127,7 @@ size_t ParseFormattedString(const char *Format, struct FormatSpecifier *fs, size
                         break;
                     case '.':
                         isPrecision = true;
+                        fs[specIndex].hasPrecision = true;
                         fs[specIndex].precision = 0;
                         break;
                 }
@@ -140,7 +141,92 @@ size_t ParseFormattedString(const char *Format, struct FormatSpecifier *fs, size
     return specIndex;
 }
 
+/// Obtains the total length, in `char`, of format specifiers such as `%d` or `%3.2lf`. This function is
+/// limited to values up to 99 for both the width and precision format fields and will attempt to truncate
+/// larger values. It will also cover the unusual case that the precision decimal point is included but no
+/// width is specified (i.e. `%.lf`).
+///
+/// @param fs             the pointer to the array of format specifiers
+/// @param SpecifierCount the number of format specifiers in the array pointed to by `fs`
+/// @return               the count, in bytes, of characters used to construct the format specifiers
+size_t GetSpecifierLength(struct FormatSpecifier *fs, size_t SpecifierCount)
+{
+    size_t formatSpecifierLength = 0;
+    for (int i = 0; i < SpecifierCount; i++) {
+        formatSpecifierLength += 2;
+        if (fs[i].modifier != '\0') {
+            formatSpecifierLength++;
+        }
+        if (fs[i].width > 0) {
+            if (fs[i].width > 99) {
+                fs[i].width = 99;
+            }
+            if (fs[i].width < 10) {
+                formatSpecifierLength += 1;
+            }
+            else {
+                formatSpecifierLength += 2;
+            }
+        }
+        if (fs[i].hasPrecision) {
+            if (fs[i].precision > 0) {
+                if (fs[i].precision > 99) {
+                    fs[i].precision = 99;
+                }
+                if (fs[i].precision == 0) {
+                    formatSpecifierLength += 1;
+                }
+                if (fs[i].precision < 10) {
+                    formatSpecifierLength += 2;
+                }
+                else {
+                    formatSpecifierLength += 3;
+                }
+            }
+        }
+    }
+
+    return formatSpecifierLength;
+}
+
+size_t TotalFormattedLength(const char *Format, struct FormatSpecifier *fs, size_t SpecifierCount)
+{
+    size_t formattedStringLength = StringLength(Format);
+    size_t specifierLength = GetSpecifierLength(fs, SpecifierCount);
+
+    return formattedStringLength;
+}
+
 EFI_STATUS Print(const char *Format, ...)
 {
+    // Set up initial variables.
+    size_t initialLength = StringLength(Format);
+    size_t occurrences = CountCharOccurrences(Format, '%');
+    size_t fsAllocCount = 2 * occurrences, specifierCount = 0, specifierLength = 0;
+    struct FormatSpecifier *fs;
+    char *stringBuffer;
+    char *conversionBuffer;
+    va_list args;
+    va_start(args, Format);
+
+    // Allocate initial storage:
+    //     - The FormatSpecifier buffer receives double the number of occurrences of '%'. This enables the
+    //       buffer to safely store all encoded format specifiers, as well as some additional garbled cases
+    //       the parser may not adequately detect.
+    //     - The conversion buffer receives an allocation of 64 bytes, which should be sufficient to safely
+    //       store any encoding of large values reasonably encountered.
+    EFI_STATUS status = AllocatePool(EfiLoaderData, fsAllocCount * sizeof(struct FormatSpecifier), &fs);
+    if (EFI_ERROR(status)) {
+        return status;
+    }
+    status = AllocatePool(EfiLoaderData, 64 * sizeof(char), &conversionBuffer);
+    if (EFI_ERROR(status)) {
+        return status;
+    }
+
+    // Parse the format string, then get the total formatted length and allocate the final string buffer.
+    specifierCount = ParseFormattedString(Format, fs, fsAllocCount);
+    specifierLength = GetSpecifierLength(fs, specifierCount);
+
     return EFI_SUCCESS;
 }
