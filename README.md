@@ -4,3 +4,9 @@
 Shasta has a number of inspirations and influences. Much of the initial design inspiration for the Shasta microkernel comes from my own studies into the hybrid kernel architecture of Windows NT, with a greater emphasis on kernel encapsulation and user-mode relegation of services. The message-passing and IPC interfaces, on the other hand, are distinctly influenced by [seL4](https://github.com/seL4/seL4). Other major influences and inspirations may arise as the kernel development gets underway.
 
 As opposed to construction *en bloc*, whereby each functional unit is built-up over the course of the first major version and finally integrated to form Shasta version 1.0, the development methodology used to implement the kernel very much emphasises rapid development, followed by refinement, of kernel features. Multiprocess scheduling and crude system call interfaces will appear as early as version 0.2 and progressively refined until version 1.0, which should represent a functional microkernel capable of operating modern workloads. While there isn't a current litmus test for the question of "what should qualify as 1.0?", my initial thoughts are that [hosting of GCC](https://wiki.osdev.org/Porting_GCC_to_your_OS) qualifies as sufficient standing for the first benchmark version.
+
+## Design goals for the *Shasta* microkernel
+
+Shasta has a number of design goals, many of which are influenced by my own experiences in computing:
+
+1. __Unix-*inspired*, not Unix-*like*__. One of the primary goals of Shasta, beyond building my own operating system, is to study what works, what doesn't work, and what works *best*. In that spirit, my intention is to build Shasta on the core of the fundamentals which the Unix model does very well, but 
