@@ -9,4 +9,14 @@ As opposed to construction *en bloc*, whereby each functional unit is built-up o
 
 Shasta has a number of design goals, many of which are influenced by my own experiences in computing:
 
-1. __Unix-*inspired*, not Unix-*like*__. One of the primary goals of Shasta, beyond building my own operating system, is to study what works, what doesn't work, and what works *best*. In that spirit, my intention is to build Shasta on the core of the fundamentals which the Unix model does very well, but 
+1. __Unix-*inspired*, not Unix-*like*__. One of the primary goals of Shasta, beyond building my own operating system, is to study what works, what doesn't work, and what works *best*. In that spirit, my intention is to build Shasta on the core of the fundamentals which the Unix model does very well, while at the same time feeling free to deviate from the Unix tradition when better or more modern design choices exist.
+
+## Roadmap
+
+As mentioned above, the primary developmental goal is to construct Shasta *en bloc*, with a basic but full-featured microkernel implementation benchmarking the 1.0 version. While this may be subject to change, my general ideas for the versioning are as follows:
+
+- `0.0.1`: __Basic UEFI bootloader complete__. 
+- `0.0.2`: __Basic interrupt, APIC, and timer functionalities present__.
+- `0.0.3`: __Basic paging and virtual memory management facilities in place__.
+- `0.0.4`: __Simplistic round-robin scheduling with ELF64 loading__.
+- `0.0.5`: __AHCI driver and filesystem server implementation__.
