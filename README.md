@@ -18,5 +18,6 @@ As mentioned above, the primary developmental goal is to construct Shasta *en bl
 - `0.0.1`: __Basic UEFI bootloader complete__. 
 - `0.0.2`: __Basic interrupt, APIC, and timer functionalities present__.
 - `0.0.3`: __Basic paging and virtual memory management facilities in place__.
+- `0.0.4`: __Interprocess communication (IPC) fundamentals present__.
 - `0.0.4`: __Simplistic round-robin scheduling with ELF64 loading__.
 - `0.0.5`: __AHCI driver and filesystem server implementation__.
