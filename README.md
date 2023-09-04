@@ -21,3 +21,4 @@ As mentioned above, the primary developmental goal is to construct Shasta *en bl
 - `0.0.4`: __Interprocess communication (IPC) fundamentals present__.
 - `0.0.4`: __Simplistic round-robin scheduling with ELF64 loading__.
 - `0.0.5`: __AHCI driver and filesystem server implementation__.
+- `0.0.6`: __Rudimentary USB support__.
